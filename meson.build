@@ -50,7 +50,11 @@ droid_conf.set_quoted('PACKAGE_NAME', 'GstDroid library')
 droid_conf.set_quoted('PACKAGE_STRING', 'GstDroid library')
 
 root_dir = include_directories('.')
-droidmedia_dep = dependency('droidmedia', required : true)
+droidmedia_dep = dependency('droidmedia', required : false)
+# Fallback if droidmedia is not found using pkg-config
+if not droidmedia_dep.found()
+  droidmedia_dep = cc.find_library('droidmedia')
+endif
 
 gstdroid_args = ['-DHAVE_CONFIG_H', '-DSYSCONFDIR="/etc"']
 
